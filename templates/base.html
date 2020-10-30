@@ -15,18 +15,24 @@
         <div class="container-sm">
             <a href="/" class="navbar-brand text-light">Feeds App</a>
             <ul class="nav navbar-nav flex-row float-right">
+                {% if session['user_id']%}
+                <li class="nav-item">
+                    <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
+                </li>
+                {% else%}
                 <li class="nav-item">
                     <a class="nav-link pr-3 text-light" href="/login">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-light" href="/register">Sign Up</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
     <div class="container mt-4">
         {% for category, msg in get_flashed_messages(with_categories=true)%}
-            <div class="alert alert-{{category}}">{{msg}}</div>
+            <div class="alert alert-{{category}} text-center">{{msg}}</div>
         {% endfor%}
     </div>
     <div class="container mt-4">
