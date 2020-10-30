@@ -3,21 +3,7 @@
 {% block title%} Register Page {% endblock %}
 
 {% block content %}
-
-<form action="" method="POST">
-    {{ form.hidden_tag() }}
-
-    {% for field in form
-        if field.widget.input_type != 'hidden' %}
-        <p>
-            {{ field.label }}
-            {{ field }}
-
-            {% for error in field.errors %}
-                {{ error }}
-            {% endfor %}
-        </p>
-        {% endfor %}
-    <button type="submit">Register</button>
-</form>
+<h1>Sign Up</h1>
+<p class="lead">Join us to fill up this application</p>
+{% include 'user_form.html'%}
 {% endblock %}

@@ -22,5 +22,13 @@ def go_register():
 @app.route('/register', methods=["GET", "POST"])
 def register_form():
     form = RegisterForm()
-    return render_template('register.html', form=form)
+    return render_template('register.html', form=form, btn='Register')
 
+@app.route('/login', methods=["GET","POST"])
+def login_form():
+    form = RegisterForm()
+    return render_template('login.html', form=form, btn='Login')
+
+@app.route('/secret')
+def secret_place():
+    return render_template('secret.html')
