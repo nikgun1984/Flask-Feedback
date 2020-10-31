@@ -13,6 +13,7 @@
             <li>Username: {{user.last_name}}</li>
         </ul>
         <form action="/users/{{user.id}}/delete" method="POST">
+            <a href="/users/{{user.id}}/feedback/add" class="btn btn-info">Add Feedback</a>
             <button type="submit" class="btn btn-danger">Delete Account</button>
         </form>
     </div>

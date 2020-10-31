@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
-from forms import RegisterForm, LoginForm
+from models import db, connect_db, User, Feedback
+from forms import RegisterForm, LoginForm, AddFeedBackForm
 from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
@@ -79,7 +79,6 @@ def user_info(user_id):
 @app.route('/users/<int:user_id>/delete', methods=["POST"])
 def delete_user(user_id):
     form = RegisterForm()
-    user = User.query.get_or_404(user_id)
     if session["user_id"]:
         db.session.delete(user)
         db.session.commit()
@@ -89,4 +88,29 @@ def delete_user(user_id):
     else:
         flash('You do not have permissions to delete this account', "danger")
         return render_template('register.html', form=form, btn="Register")
+
+@app.route('/users/<int:user_id>/feedback/add', methods=["GET","POST"])
+def add_feedback(user_id):
+    form = AddFeedBackForm()
+    user = User.query.get_or_404(user_id)
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+
+        if session["user_id"]:
+            feedback = Feedback(title,content,user_id)
+            db.session.add(feedback)
+            db.session.commit()
+            flash("Feedback was added", "info")
+            return redirect(f'/users/{user_id}')
+        else:
+            flash("You do not have permissions to add any feedback", "warning")
+            return redirect('/register')
+    
+    return render_template('add_feedback.html', form=form, user=user, btn="Submit")
+
+
+
+
+
     
