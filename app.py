@@ -74,7 +74,8 @@ def logout():
 @app.route('/users/<int:user_id>')
 def user_info(user_id):
     user = User.query.get_or_404(user_id)
-    return render_template('user_info.html', user=user)
+    feedback = db.session.query(Feedback).filter(Feedback.user_id == user_id)
+    return render_template('user_info.html', user=user, feedback=feedback)
 
 @app.route('/users/<int:user_id>/delete', methods=["POST"])
 def delete_user(user_id):
@@ -92,13 +93,12 @@ def delete_user(user_id):
 @app.route('/users/<int:user_id>/feedback/add', methods=["GET","POST"])
 def add_feedback(user_id):
     form = AddFeedBackForm()
-    user = User.query.get_or_404(user_id)
     if form.validate_on_submit():
         title = form.title.data
         content = form.content.data
 
         if session["user_id"]:
-            feedback = Feedback(title,content,user_id)
+            feedback = Feedback(title=title,content=content,user_id=user_id)
             db.session.add(feedback)
             db.session.commit()
             flash("Feedback was added", "info")
@@ -106,8 +106,26 @@ def add_feedback(user_id):
         else:
             flash("You do not have permissions to add any feedback", "warning")
             return redirect('/register')
-    
-    return render_template('add_feedback.html', form=form, user=user, btn="Submit")
+    if session.get("user_id"):
+        return render_template('add_feedback.html', form=form, btn="Submit")
+    else:
+        return redirect('/register')
+
+@app.route('/users/<int:user_id>/feedback/update', methods=["GET","POST"])
+def update_feedback(user_id):
+    if session.get("user_id"):
+        feedback = db.session.query(Feedback).filter(Feedback.user_id == user_id)
+        form = AddFeedBackForm(obj=feedback)
+        if form.validate_on_submit():
+            feedback.title = form.title.data
+            feedback.content = form.content.data
+            db.session.commit()
+            flash("Feedback has successfully updated", "info")
+            return redirect(f'/users/{user_iad}')
+        return render_template('update_feedback.html',btn='Update',form=form)
+    else:
+        return redirect('/register')
+
 
 
 

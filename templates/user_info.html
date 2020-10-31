@@ -12,10 +12,23 @@
             <li>Username: {{user.first_name}}</li>
             <li>Username: {{user.last_name}}</li>
         </ul>
-        <form action="/users/{{user.id}}/delete" method="POST">
-            <a href="/users/{{user.id}}/feedback/add" class="btn btn-info">Add Feedback</a>
+        <form action="/users/{{session['user_id']}}/delete" method="POST">
+            <a href="/users/{{session['user_id']}}/feedback/add" class="btn btn-info">Add Feedback</a>
             <button type="submit" class="btn btn-danger">Delete Account</button>
         </form>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="jumbotron justify-content-center">
+        <h3 class="text-center">Feedback</h3>
+        {%for feed in feedback%}
+        <div class="card mt-2">
+            <div class="card-body">
+                <h6><em>{{feed.title}}</em> <a href="/users/{{session['user_id']}}/feedback/update"><i class="fas fa-edit"></i></a> <i class="fas fa-trash"></i></h6>
+                <p>{{feed.content}}</p>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
