@@ -21,11 +21,16 @@
 <div class="row justify-content-center">
     <div class="jumbotron justify-content-center">
         <h3 class="text-center">Feedback</h3>
-        {%for feed in feedback%}
+        {%for feedback in feedbacks%}
         <div class="card mt-2">
             <div class="card-body">
-                <h6><em>{{feed.title}}</em> <a href="/users/{{session['user_id']}}/feedback/update"><i class="fas fa-edit"></i></a> <i class="fas fa-trash"></i></h6>
-                <p>{{feed.content}}</p>
+                <h6><em>{{feedback.title}}</em>
+                    <form action="/feedback/{{feedback.id}}/delete", method="POST", class="d-inline">
+                        <a href="/feedback/{{feedback.id}}/update"><i class="fas fa-edit"></i></a>
+                        <button class="btn bg-transparent"><i class="fas fa-trash"></i></button>                    
+                    </form>
+                </h6>
+                <p>{{feedback.content}}</p>
             </div>
         </div>
         {% endfor %}

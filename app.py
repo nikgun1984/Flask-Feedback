@@ -74,8 +74,8 @@ def logout():
 @app.route('/users/<int:user_id>')
 def user_info(user_id):
     user = User.query.get_or_404(user_id)
-    feedback = db.session.query(Feedback).filter(Feedback.user_id == user_id)
-    return render_template('user_info.html', user=user, feedback=feedback)
+    feedbacks = db.session.query(Feedback).all()
+    return render_template('user_info.html', user=user, feedbacks=feedbacks)
 
 @app.route('/users/<int:user_id>/delete', methods=["POST"])
 def delete_user(user_id):
@@ -111,20 +111,33 @@ def add_feedback(user_id):
     else:
         return redirect('/register')
 
-@app.route('/users/<int:user_id>/feedback/update', methods=["GET","POST"])
-def update_feedback(user_id):
+@app.route('/feedback/<int:feedback_id>/update', methods=["GET","POST"])
+def update_feedback(feedback_id):
     if session.get("user_id"):
-        feedback = db.session.query(Feedback).filter(Feedback.user_id == user_id)
+        feedback = Feedback.query.get(feedback_id)
         form = AddFeedBackForm(obj=feedback)
         if form.validate_on_submit():
             feedback.title = form.title.data
             feedback.content = form.content.data
             db.session.commit()
-            flash("Feedback has successfully updated", "info")
-            return redirect(f'/users/{user_iad}')
-        return render_template('update_feedback.html',btn='Update',form=form)
+            flash("Feedback updated successfully", "info")
+            return redirect(f'/users/{session["user_id"]}')
+        return render_template('update_feedback.html',btn='Update',form=form,feedback=feedback)
     else:
         return redirect('/register')
+
+@app.route('/feedback/<int:feedback_id>/delete', methods=["POST"])
+def delete_feedback(feedback_id):
+    if session.get("user_id"):
+        feedback = Feedback.query.get_or_404(feedback_id)
+        db.session.delete(feedback)
+        db.session.commit()
+        flash("Feedback deleted  successfully","info")
+        return redirect(f'/users/{session["user_id"]}')
+    else:
+        return redirect('/register')
+    
+
 
 
 
