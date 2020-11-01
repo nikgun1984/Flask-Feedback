@@ -1,0 +1,10 @@
+{% extends 'base.html'%}
+
+{% block title%} Send Email {% endblock %}
+
+{% block content %}
+<h1>Enter your email for verification</h1>
+<p class="lead">After your valid email submission you will get confirmation link</p>
+<p class="lead">Link is valid only for an hour</p>
+{% include 'form.html'%}
+{% endblock %}

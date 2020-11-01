@@ -14,13 +14,15 @@
         </ul>
         <form action="/users/{{session['user_id']}}/delete" method="POST">
             <a href="/users/{{session['user_id']}}/feedback/add" class="btn btn-info">Add Feedback</a>
+            <a href="/users/{{session['user_id']}}/mail" class="btn btn-warning">Password Reset</a>
             <button type="submit" class="btn btn-danger">Delete Account</button>
         </form>
     </div>
 </div>
 <div class="row justify-content-center">
     <div class="jumbotron justify-content-center">
-        <h3 class="text-center">Feedback</h3>
+        <h3 class="text-center">Feedbacks</h3>
+        {% if feedbacks %}
         {%for feedback in feedbacks%}
         <div class="card mt-2">
             <div class="card-body">
@@ -34,6 +36,9 @@
             </div>
         </div>
         {% endfor %}
+        {% else %}
+        <p><b>No Feedbacks yet</b></p>
+        {% endif%}
     </div>
 </div>
 {% endblock %}

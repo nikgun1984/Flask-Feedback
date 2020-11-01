@@ -18,3 +18,11 @@ class LoginForm(FlaskForm):
 class AddFeedBackForm(FlaskForm):
     title = StringField("Title", validators=[InputRequired("Please enter the title of feedback")])
     content = TextAreaField("Content", validators=[InputRequired("Please enter missing comment")])
+
+class EmailVerificationForm(FlaskForm):
+    email = StringField("Email address", validators=[DataRequired("Please enter your email address."),Email("This field requires a valid email address")])
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField("Password", validators=[InputRequired("Please enter your password")])
+
+
